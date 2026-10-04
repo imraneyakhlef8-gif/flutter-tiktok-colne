@@ -13,9 +13,9 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      - run: flutter create. --platforms=android --project-name dramabox_clone
+      - run: flutter create. --platforms=android
       - run: flutter pub get
-      - run: flutter build apk --release --no-tree-shake-icons
+      - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
           name: dramabox-apk
