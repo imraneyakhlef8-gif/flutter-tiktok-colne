@@ -13,22 +13,9 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      - name: Fix all files
+      - run: flutter create. --platforms=android --project-name dramabox_clone
+      - name: Replace main.dart
         run: |
-          cat > pubspec.yaml << 'EOF'
-          name: dramabox_clone
-          description: DramaBox clone
-          publish_to: 'none'
-          version: 1.0.0+1
-          environment:
-            sdk: '>=3.0.0 <4.0.0'
-          dependencies:
-            flutter:
-              sdk: flutter
-          flutter:
-            uses-material-design: true
-          EOF
-          mkdir -p lib
           cat > lib/main.dart << 'EOF'
           import 'package:flutter/material.dart';
           void main() => runApp(const MyApp());
@@ -43,28 +30,16 @@ jobs:
                   body: PageView.builder(
                     scrollDirection: Axis.vertical,
                     itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        color: Colors.primaries[index % Colors.primaries.length],
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('VIDEO ${index+1}', style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
-                              SizedBox(height: 20),
-                              Text('DramaBox Clone Working! 🔥', style: TextStyle(color: Colors.white, fontSize: 20)),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+                    itemBuilder: (c,i)=>Container(
+                      color: Colors.primaries[i%Colors.primaries.length],
+                      child: Center(child: Text('VIDEO ${i+1} 🔥',style: TextStyle(color: Colors.white,fontSize:40,fontWeight: FontWeight.bold))),
+                    ),
                   ),
                 ),
               );
             }
           }
           EOF
-      - run: flutter create. --platforms=android
       - run: flutter pub get
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
