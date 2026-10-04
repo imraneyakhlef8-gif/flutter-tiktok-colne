@@ -13,12 +13,10 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      - name: Build from scratch
-        run: |
-          rm -rf android ios web
-          flutter create. --platforms=android --project-name dramabox_clone --overwrite
-          flutter pub get
-          flutter build apk --release
+      - run: rm -rf android ios web
+      - run: flutter create. --platforms=android --project-name dramabox_clone --overwrite
+      - run: flutter pub get
+      - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
           name: dramabox-apk
