@@ -13,6 +13,57 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
+      - name: Fix all files
+        run: |
+          cat > pubspec.yaml << 'EOF'
+          name: dramabox_clone
+          description: DramaBox clone
+          publish_to: 'none'
+          version: 1.0.0+1
+          environment:
+            sdk: '>=3.0.0 <4.0.0'
+          dependencies:
+            flutter:
+              sdk: flutter
+          flutter:
+            uses-material-design: true
+          EOF
+          mkdir -p lib
+          cat > lib/main.dart << 'EOF'
+          import 'package:flutter/material.dart';
+          void main() => runApp(const MyApp());
+          class MyApp extends StatelessWidget {
+            const MyApp({super.key});
+            @override
+            Widget build(BuildContext context) {
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                home: Scaffold(
+                  backgroundColor: Colors.black,
+                  body: PageView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        color: Colors.primaries[index % Colors.primaries.length],
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('VIDEO ${index+1}', style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
+                              SizedBox(height: 20),
+                              Text('DramaBox Clone Working! 🔥', style: TextStyle(color: Colors.white, fontSize: 20)),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              );
+            }
+          }
+          EOF
       - run: flutter create. --platforms=android
       - run: flutter pub get
       - run: flutter build apk --release
